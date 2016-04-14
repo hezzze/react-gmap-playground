@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react/addons';
+import React, {PropTypes, Component} from 'react';
 import controllable from 'react-controllables';
 import GoogleMap from 'google-map-react';
 import Marker, {K_SCALE_NORMAL} from './Marker';
@@ -15,6 +15,9 @@ const K_MARGIN_BOTTOM = 30;
 const K_MARGIN_LEFT = 30;
 
 const K_HOVER_DISTANCE = 30;
+
+const K_SCALE_TABLE_HOVER = 1;
+
 
 @controllable(['center', 'zoom', 'markers'])
 export default class MainMapBlock extends Component {
@@ -45,6 +48,7 @@ export default class MainMapBlock extends Component {
   constructor(props) {
     super(props);
     this._distanceToMouse = customDistanceToMouse;
+    this._onBoundsChange = this._onBoundsChange.bind(this);
   }
 
   _onBoundsChange(center, zoom, bounds, marginBounds) {
@@ -58,7 +62,9 @@ export default class MainMapBlock extends Component {
 
 
   render() {
-    const {rowFrom, rowTo} = getRealFromTo(this.props.visibleRowFirst, this.props.visibleRowLast, this.props.maxVisibleRows, this.props.markers.size);
+    const [rowFrom, rowTo] = [0, 5];
+
+    // const {rowFrom, rowTo} = getRealFromTo(this.props.visibleRowFirst, this.props.visibleRowLast, this.props.maxVisibleRows, this.props.markers.size);
 
     const Markers = this.props.markers &&
       this.props.markers.filter((m, index) => index >= rowFrom && index <= rowTo)
@@ -69,7 +75,7 @@ export default class MainMapBlock extends Component {
           lat={marker['lat']}
           lng={marker['lng']}
           // any user props
-
+          hoveredAtList={index + rowFrom === this.props.hoveredIndex}
           {...markerDescriptions[marker['type']]}
           marker={marker} />
       ));
@@ -77,7 +83,7 @@ export default class MainMapBlock extends Component {
     return (
       <GoogleMap
         // apiKey={null}
-        center={this.props.center.toJS()}
+        center={this.props.center}
         zoom={this.props.zoom}
         onBoundsChange={this._onBoundsChange}
         margin={[K_MARGIN_TOP, K_MARGIN_RIGHT, K_MARGIN_BOTTOM, K_MARGIN_LEFT]}

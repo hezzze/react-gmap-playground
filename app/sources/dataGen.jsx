@@ -1,7 +1,7 @@
 import immutable from 'immutable';
 
 // really really nice but big size library
-import {seed} from 'faker/vendor/mersenne.js';
+import {seed} from 'faker/vendor/mersenne';
 import faker from 'faker';
 
 
@@ -74,5 +74,5 @@ export default function genMarkersData({count, seed: seedNumber, latVarM, lngVar
       }));
   }
 
-  return markersData;
+  return markersData.toJS();
 }

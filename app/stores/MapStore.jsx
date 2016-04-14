@@ -1,4 +1,4 @@
-import alt from 'alt';
+import alt from '../alt';
 import MapActions from '../actions/MapActions';
 
 
@@ -14,7 +14,7 @@ function ptInRect(pt, rect) {
 
 // use rbush https://github.com/mourner/rbush if you have really big amount of points
 function calcFilteredAndSortedMarkers(data, mapInfo) {
-  const marginBounds = mapInfo && mapInfo.marginBounds;
+  const marginBounds = mapInfo && mapInfo['marginBounds'];
 
   if (!data || !marginBounds) {
     return [];
@@ -56,22 +56,25 @@ class MapStore {
     Object.assign(this, defaultMapState());
 
     this.bindListeners({
-      handleQuery: MapActions.QUERY
+      handleQuery: MapActions.QUERY,
+      handleHoverIndexChange: MapActions.ON_HOVER_INDEX_CHANGE
     });
   }
 
-  handleQuery(markersDataPromise) {
+  handleQuery(markersData) {
 
-    markersDataPromise.then(markersData => {
-      this.data = markersData;
+    this.data = markersData;
 
-      this.dataFiltered = calcFilteredAndSortedMarkers(this.data, this.mapInfo);
-    });
+    this.dataFiltered = calcFilteredAndSortedMarkers(this.data, this.mapInfo);
 
     // return state
     //     .set('data', markersData)
     //     .update(s => s.set('dataFiltered', calcFilteredAndSortedMarkers(s.get('data'), s.get('mapInfo'))));
 
+  }
+
+  handleHoverIndexChange(index) {
+    this.tableRowsInfo.hoveredRowIndex = index;
   }
 }
 

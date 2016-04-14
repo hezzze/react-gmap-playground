@@ -2,7 +2,7 @@
  * Marker example
  */
 
-import React, {PropTypes, Component} from 'react/addons';
+import React, {PropTypes, Component} from 'react';
 import cx from 'classnames';
 
 import {getMarkerHolderStyle, getMarkerStyle, getMarkerTextStyle} from '../helpers/marker_styles';
@@ -52,7 +52,7 @@ export default class MapMarker extends Component {
     $onMouseAllow: PropTypes.func,
 
     marker: PropTypes.any,
-    hoveredAtTable: PropTypes.bool,
+    hoveredAtList: PropTypes.bool,
     scale: PropTypes.number,
     showBallon: PropTypes.bool,
     onCloseClick: PropTypes.func,
@@ -98,7 +98,7 @@ export default class MapMarker extends Component {
   render() {
     // TODO add http://schema.org/docs/gs.html
     let scale = this.props.$hover ? K_SCALE_HOVER : this.props.scale;
-    scale = this.props.hoveredAtTable ? K_SCALE_TABLE_HOVER : 0.65;
+    scale = this.props.hoveredAtList ? K_SCALE_TABLE_HOVER : 0.65;
 
     const markerHolderStyle = getMarkerHolderStyle(this.props.size, this.props.origin);
     const markerStyle = getMarkerStyle(this.props.size, this.props.origin);
@@ -120,7 +120,7 @@ export default class MapMarker extends Component {
 
     // css hints library https://github.com/istarkov/html-hint
     return (
-      <div style={markerHolderStyle}>
+      <div style={markerHolderStyle} className='map-marker'>
         <div
           style={styleMarkerMarker}
           className={cx('map-marker__marker', imageClass)}>
